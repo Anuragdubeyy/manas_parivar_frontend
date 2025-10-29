@@ -5,6 +5,6 @@
           "destination": "/index.html" }
     ],
   "env": {
-    "VITE_API_URL": "https://https://manas-parivar-backend.vercel.app/api"
+    "VITE_API_URL": "https://manas-parivar-backend.vercel.app/api"
   }
 }
