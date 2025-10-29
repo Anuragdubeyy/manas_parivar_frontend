@@ -13,6 +13,12 @@
       "dest": "/index.html"
     }
   ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "framework": "vite",
   "env": {
     "VITE_API_URL": "https://https://manas-parivar-backend.vercel.app/api"
