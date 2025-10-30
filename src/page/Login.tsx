@@ -21,7 +21,11 @@ export default function LoginPage() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       alert("लॉगिन सफल 🙏 जय श्री राम");
-      window.location.href = "/user"; // redirect to user page
+      if (res.data.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/user");
+      }
     } catch (err) {
       console.error(err);
       alert("गलत विवरण, कृपया पुनः प्रयास करें!");
