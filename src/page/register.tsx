@@ -41,7 +41,7 @@ export default function RegisterPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white/90 p-6 rounded-2xl shadow-lg border border-orange-300 m-2"
+        className="bg-white/90 p-6 md:w-1/3 rounded-2xl shadow-lg border border-orange-300 m-2"
       >
         <h2 className="text-xl font-semibold text-orange-700 mb-4 text-center">
           🙏 नया सदस्य पंजीकरण 🙏
