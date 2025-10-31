@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
+import { toast } from "react-toastify";
 
 interface Product {
   _id: string;
@@ -10,26 +11,36 @@ interface Product {
 export default function UserPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [newCounts, setNewCounts] = useState<Record<string, number>>({});
+  const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
+    const [isFetchingProducts, setIsFetchingProducts] = useState(false);
 
   const fetchProducts = async () => {
     try {
+      setIsFetchingProducts(true)
       const { data } = await API.get<Product[]>("/products/all");
       setProducts(data);
     } catch (err) {
       console.error("Error fetching products:", err);
+      toast.error("उत्पाद लाने में त्रुटि हुई 🙏 कृपया पुनः प्रयास करें!");
+    } finally {
+      setIsFetchingProducts(false); // 👈 hide loader
     }
   };
 
-  const addCount = async (productId: string) => {
+ const addCount = async (productId: string) => {
     const value = newCounts[productId];
     if (!value || value <= 0) return alert("कृपया सही संख्या दर्ज करें 🙏");
 
     try {
+      setLoadingProduct(productId);
       await API.post("/products/count", { productId, count: value });
       setNewCounts((prev) => ({ ...prev, [productId]: 0 }));
-      await fetchProducts(); // refresh to show updated total
+      await fetchProducts(); // refresh after success
     } catch (err) {
       console.error("Error adding count:", err);
+      alert("त्रुटि हुई, कृपया पुनः प्रयास करें 🙏");
+    } finally {
+      setLoadingProduct(null);
     }
   };
 
@@ -38,9 +49,9 @@ export default function UserPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-orange-100">
+    <div className="min-h-screen w-screen  bg-gradient-to-b from-orange-50 to-orange-100">
       {/* Header */}
-      <div className="text-center py-6 bg-gradient-to-r from-orange-300 to-yellow-200 shadow-md">
+      <div className="text-center  py-6 bg-gradient-to-r from-orange-300 to-yellow-200 shadow-md">
         <h1 className="text-3xl font-extrabold text-orange-600  drop-shadow-lg">
           मानस परिवार
         </h1>
@@ -54,8 +65,36 @@ export default function UserPage() {
         <p>सीताराम चरण रति मोरे । अनुदिन बढ़ऊ अनुग्रह तोरे</p>
       </div>
 
+      {isFetchingProducts && (
+        <div className="flex justify-center items-center mt-6">
+          <svg
+            className="animate-spin h-8 w-8 text-orange-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+          <span className="ml-3 text-orange-700 font-medium">
+            संकल्प लोड हो रहे हैं...
+          </span>
+        </div>
+      )}
+
       {/* Product Cards */}
-      <div className="p-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <div className="p-6 grid sm:grid-cols-2 lg:grid-cols-2 items-center gap-6 w-full lg:w-fit mx-auto">
         {products.map((p) => (
           <div
             key={p._id}
@@ -87,9 +126,40 @@ export default function UserPage() {
 
             <button
               onClick={() => addCount(p._id)}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all"
+              disabled={loadingProduct === p._id}
+              className={`flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-all ${
+                loadingProduct === p._id
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:from-orange-600 hover:to-orange-700"
+              }`}
             >
-              ➕ जप संख्या जोड़ें
+              {loadingProduct === p._id ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  <span>जोड़ रहे है...</span>
+                </>
+              ) : (
+                "➕ जप संख्या जोड़ें"
+              )}
             </button>
           </div>
         ))}

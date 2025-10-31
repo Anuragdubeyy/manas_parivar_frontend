@@ -1,6 +1,7 @@
 import { useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ export default function RegisterPage() {
     password: "",
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,18 +19,21 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setLoading(true);
       await API.post("/auth/register", formData);
-      alert("पंजीकरण सफल 🙏 कृपया लॉगिन करें");
+      toast.success("पंजीकरण सफल 🙏 कृपया लॉगिन करें");
     } catch (err) {
       console.error(err);
-      alert("त्रुटि हुई, कृपया पुनः प्रयास करें!");
+      toast.error("त्रुटि हुई, कृपया पुनः प्रयास करें!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-center items-center bg-gradient-to-b from-orange-50 to-yellow-100">
       <h1 className="text-3xl font-extrabold text-orange-600 mb-4">
-        मानस परिवार 
+        मानस परिवार
       </h1>
       <p className="text-orange-800 font-semibold mb-6">
         “राम नाम जपते रहो, सुख सम्पदा सब पाओ”
@@ -71,10 +76,36 @@ export default function RegisterPage() {
           type="submit"
           className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all"
         >
-          पंजीकरण करें
+          {loading ? (
+            <div className="flex gap-2 justify-center">
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              <span>पंजीकरण हो रहा है...</span>
+            </div>
+          ) : (
+            <>पंजीकरण करें</>
+          )}
         </button>
-        
-         <p className="text-center text-sm text-orange-700 mt-4">
+
+        <p className="text-center text-sm text-orange-700 mt-4">
           सदस्य लॉगिन{" "}
           <button
             type="button"
