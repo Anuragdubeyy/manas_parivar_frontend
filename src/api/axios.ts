@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL:  "https://manas-parivar-backend.vercel.app/api",
+  baseURL:  "http://localhost:5000/api",
 });
 
 API.interceptors.request.use((config) => {

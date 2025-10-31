@@ -136,7 +136,7 @@ export default function AdminDashboard() {
         {/* User Count Section */}
         <section className="max-w-6xl mx-auto mt-8  bg-white/90 rounded-2xl shadow-md border border-orange-300 p-6 overflow-auto ">
           <h2 className="text-2xl  font-bold text-orange-700 mb-4">
-          🙏 उपयोगकर्ताओं की जप संख्या ({users.length})
+          🙏 उपयोगकर्ताओं की संख्या ({users.length})
           </h2>
           <table className="min-w-full bg-white shadow rounded-lg">
             <thead className="bg-gray-200">

@@ -1,22 +1,36 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { toast } from "react-toastify";
+import DailyProductTable from "@/components/common/DailyProductTable";
 
 interface Product {
   _id: string;
   name: string;
   totalCount?: number;
 }
-
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  products: UserProduct[];
+  totalUserCount?: number;
+}
+interface UserProduct {
+  productId: string;
+  name: string;
+  count: number;
+}
 export default function UserPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [newCounts, setNewCounts] = useState<Record<string, number>>({});
   const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
-    const [isFetchingProducts, setIsFetchingProducts] = useState(false);
+  const [isFetchingProducts, setIsFetchingProducts] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+    const [loginUser, setLoginUser] = useState<{ name: string; email: string } | null>(null);
 
   const fetchProducts = async () => {
     try {
-      setIsFetchingProducts(true)
+      setIsFetchingProducts(true);
       const { data } = await API.get<Product[]>("/products/all");
       setProducts(data);
     } catch (err) {
@@ -27,7 +41,7 @@ export default function UserPage() {
     }
   };
 
- const addCount = async (productId: string) => {
+  const addCount = async (productId: string) => {
     const value = newCounts[productId];
     if (!value || value <= 0) return alert("कृपया सही संख्या दर्ज करें 🙏");
 
@@ -44,10 +58,39 @@ export default function UserPage() {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const { data } = await API.get<User[]>(
+        "/products/admin/users-with-counts"
+      );
+      setUsers(data);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    toast.success("आपने सफलतापूर्वक लॉगआउट कर लिया 🙏");
+    window.location.href = "/"; // redirect to login
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchUsers();
   }, []);
 
+    useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setLoginUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error("Invalid user data in localStorage:", err);
+      }
+    }
+  }, []);
   return (
     <div className="min-h-screen w-screen  bg-gradient-to-b from-orange-50 to-orange-100">
       {/* Header */}
@@ -58,6 +101,22 @@ export default function UserPage() {
         <p className="text-xl font-bold text-orange-950 mt-2">
           📿राम जपते रहो, काम करते रहो 📿
         </p>
+        <div>
+        <div className="text-center mt-4">
+          <p className="text-orange-800 text-xl font-bold text-lg">
+            🙏 स्वागत है,{" "}
+            <span className="font-bold">
+              {loginUser?.name || "भक्त"}
+            </span>
+          </p>
+        </div>
+        {/* <button
+            onClick={handleLogout}
+            className="bg-gradient-to-r  from-orange-500 to-orange-600 text-white px-2  rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all items-right mt-3"
+          >
+            🚪 Logout
+          </button> */}
+        </div>
       </div>
 
       {/* Decorative Section */}
@@ -164,6 +223,45 @@ export default function UserPage() {
           </div>
         ))}
       </div>
+      <div className="bg-white/90 rounded-2xl shadow-md border border-orange-300 p-2 h-96  m-4">
+        <DailyProductTable />
+      </div>
+      <section className="max-w-6xl m-4  bg-white/90 rounded-2xl shadow-md border border-orange-300 p-3 overflow-auto  ">
+        <h2 className="text-2xl  font-bold text-orange-700 mb-4">
+          उपयोगकर्ताओं की संख्या ({users.length})
+        </h2>
+        <table className="min-w-full bg-white shadow rounded-lg overflow-scroll">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="p-3 text-left">User</th>
+              {products.map((p) => (
+                <th key={p._id} className="p-3 text-center">
+                  {p.name}
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id} className="border-b">
+                <td className="p-3">{user.name || user.email}</td>
+
+                {products.map((p) => {
+                  const productData = user.products.find(
+                    (prod) => prod.productId === p._id
+                  );
+                  return (
+                    <td key={p._id} className="p-3 text-center">
+                      {productData ? productData.count : 0}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
 
       {/* Footer */}
       <footer className="text-center py-4 text-orange-800 text-sm font-bold">
