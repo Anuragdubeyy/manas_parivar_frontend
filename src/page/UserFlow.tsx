@@ -69,12 +69,12 @@ export default function UserPage() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    toast.success("आपने सफलतापूर्वक लॉगआउट कर लिया 🙏");
-    window.location.href = "/"; // redirect to login
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("user");
+  //   localStorage.removeItem("token");
+  //   toast.success("आपने सफलतापूर्वक लॉगआउट कर लिया 🙏");
+  //   window.location.href = "/"; // redirect to login
+  // };
 
   useEffect(() => {
     fetchProducts();
