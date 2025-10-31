@@ -48,7 +48,7 @@ export default function LoginPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white/90 p-6 w-1/3  rounded-2xl shadow-lg border border-orange-300 m-2"
+        className="bg-white/90 p-6 lg:w-1/3  rounded-2xl shadow-lg border border-orange-300 m-4"
       >
         <h2 className="text-xl font-semibold text-orange-700 mb-4 text-center">
           🔸 सदस्य लॉगिन 🔸
