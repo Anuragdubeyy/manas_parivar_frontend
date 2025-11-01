@@ -4,6 +4,7 @@ import AdminDashboard from "./page/adminDashboard";
 import Register from "./page/register";
 import type { JSX } from "react";
 import LoginPage from "./page/Login";
+import JapCounter from "./components/common/JapMala";
 function ProtectedRoute({ children, allowedRole } : { children: JSX.Element; allowedRole?: "user" | "admin" }) {
  const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
@@ -32,6 +33,14 @@ function App() {
           element={
             <ProtectedRoute allowedRole="user">
               <UserFlow />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/jap"
+          element={
+            <ProtectedRoute allowedRole="user">
+              <JapCounter />
             </ProtectedRoute>
           }
         />

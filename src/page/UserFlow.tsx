@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { toast } from "react-toastify";
 import DailyProductTable from "@/components/common/DailyProductTable";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   _id: string;
@@ -26,8 +27,11 @@ export default function UserPage() {
   const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
   const [isFetchingProducts, setIsFetchingProducts] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
-    const [loginUser, setLoginUser] = useState<{ name: string; email: string } | null>(null);
-
+  const [loginUser, setLoginUser] = useState<{
+    name: string;
+    email: string;
+  } | null>(null);
+  const navigate = useNavigate();
   const fetchProducts = async () => {
     try {
       setIsFetchingProducts(true);
@@ -81,7 +85,7 @@ export default function UserPage() {
     fetchUsers();
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
@@ -91,6 +95,15 @@ export default function UserPage() {
       }
     }
   }, []);
+  // if (selectedProduct) {
+  //   return (
+  //     <JapCounter
+  //       productId={selectedProduct._id}
+  //       productName={selectedProduct.name}
+  //       onBack={() => setSelectedProduct(null)}
+  //     />
+  //   );
+  // }
   return (
     <div className="min-h-screen w-screen  bg-gradient-to-b from-orange-50 to-orange-100">
       {/* Header */}
@@ -102,15 +115,13 @@ export default function UserPage() {
           📿राम जपते रहो, काम करते रहो 📿
         </p>
         <div>
-        <div className="text-center mt-4">
-          <p className="text-orange-800 text-xl font-bold text-lg">
-            🙏 स्वागत है,{" "}
-            <span className="font-bold">
-              {loginUser?.name || "भक्त"}
-            </span>
-          </p>
-        </div>
-        {/* <button
+          <div className="text-center mt-4">
+            <p className="text-orange-800 text-xl font-bold text-lg">
+              🙏 स्वागत है,{" "}
+              <span className="font-bold">{loginUser?.name || "भक्त"}</span>
+            </p>
+          </div>
+          {/* <button
             onClick={handleLogout}
             className="bg-gradient-to-r  from-orange-500 to-orange-600 text-white px-2  rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all items-right mt-3"
           >
@@ -219,6 +230,15 @@ export default function UserPage() {
               ) : (
                 "➕ जप संख्या जोड़ें"
               )}
+            </button>
+            <button
+ onClick={() =>
+                navigate("/jap", {
+                  state: { productId: p._id, productName: p.name },
+                })
+              }              className="mt-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-all"
+            >
+              🙏 जप करें
             </button>
           </div>
         ))}
