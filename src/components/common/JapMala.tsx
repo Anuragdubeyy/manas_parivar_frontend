@@ -1,7 +1,7 @@
 import API from "@/api/axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
+import { toast } from "react-toastify";
 export default function JapCounter() {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -56,6 +56,7 @@ export default function JapCounter() {
     try {
       const res = await API.post("/products/count/jap-tap", { productId });
       console.log("✅ Mala updated:", res.data);
+      toast.success("आप का जप जुड़ गया 🙏 जय श्री राम");
     } catch (err) {
       console.error("❌ Error saving mala:", err);
     } finally {
