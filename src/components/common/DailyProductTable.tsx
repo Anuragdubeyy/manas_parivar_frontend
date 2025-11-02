@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import API from "@/api/axios";
 
-interface Product {
-  _id: string;
-  name: string;
-}
+// interface Product {
+//   _id: string;
+//   name: string;
+// }
 
 interface ProductCount {
   _id: string;
-  product: Product;
-  count: number;
+  productName: string;
+  totalCount: number;
   date: string;
 }
 
@@ -85,8 +85,8 @@ const DailyProductTable: React.FC = () => {
                     <td className="border px-4 py-2">
                       {new Date(item.date).toLocaleDateString()}
                     </td>
-                    <td className="border px-4 py-2">{item.product?.name || "N/A"}</td>
-                    <td className="border px-4 py-2">{item.count}</td>
+                    <td className="border px-4 py-2">{item.productName || "N/A"}</td>
+                    <td className="border px-4 py-2">{item.totalCount}</td>
                   </tr>
                 ))
               ) : (

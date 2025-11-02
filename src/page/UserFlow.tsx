@@ -232,53 +232,95 @@ export default function UserPage() {
               )}
             </button>
             <button
- onClick={() =>
+              onClick={() =>
                 navigate("/jap", {
                   state: { productId: p._id, productName: p.name },
                 })
-              }              className="mt-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-all"
+              }
+              className="mt-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-all"
             >
               🙏 जप करें
             </button>
           </div>
         ))}
       </div>
-      <div className="bg-white/90 rounded-2xl shadow-md border border-orange-300 p-2 h-96  m-4">
+      <div className="bg-white/90 rounded-2xl shadow-md border border-orange-300 p-2 h-96 overflow-auto m-4">
         <DailyProductTable />
       </div>
-      <section className="max-w-6xl m-4  bg-white/90 rounded-2xl shadow-md border border-orange-300 p-3 overflow-auto  ">
-        <h2 className="text-2xl  font-bold text-orange-700 mb-4">
+      <section className="max-w-6xl m-4 bg-white/90 rounded-2xl shadow-md border border-orange-300 p-3 overflow-auto">
+        <h2 className="text-2xl font-bold text-orange-700 mb-4">
           उपयोगकर्ताओं की संख्या ({users.length})
         </h2>
+
         <table className="min-w-full bg-white shadow rounded-lg overflow-scroll">
           <thead className="bg-gray-200">
             <tr>
-              <th className="p-3 text-left">User</th>
+              <th className="p-3 text-center">#</th>
+              <th className="p-3 text-center">User</th>
               {products.map((p) => (
                 <th key={p._id} className="p-3 text-center">
                   {p.name}
                 </th>
               ))}
+              {/* <th className="p-3 text-center">Total</th> */}
             </tr>
           </thead>
 
           <tbody>
-            {users.map((user) => (
-              <tr key={user._id} className="border-b">
-                <td className="p-3">{user.name || user.email}</td>
+            {/** 1️⃣ Sort users by total count before rendering */}
+            {[...users]
+              .sort((a, b) => {
+                const totalA = a.products.reduce(
+                  (sum, prod) => sum + (prod.count || 0),
+                  0
+                );
+                const totalB = b.products.reduce(
+                  (sum, prod) => sum + (prod.count || 0),
+                  0
+                );
+                return totalB - totalA; // highest first
+              })
+              .map((user, index) => {
+                // 2️⃣ Calculate total for each product
+                // const totalForUser = user.products.reduce(
+                //   (sum, prod) => sum + (prod.count || 0),
+                //   0
+                // );
 
-                {products.map((p) => {
-                  const productData = user.products.find(
-                    (prod) => prod.productId === p._id
-                  );
-                  return (
-                    <td key={p._id} className="p-3 text-center">
-                      {productData ? productData.count : 0}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+                return (
+                  <tr
+                    key={user._id}
+                    className={`border-b ${
+                      index === 0
+                        ? "bg-yellow-100 font-bold" // 🥇 highlight top user
+                        : index === 1
+                        ? "bg-gray-100" // 🥈 second
+                        : index === 2
+                        ? "bg-orange-50" // 🥉 third
+                        : ""
+                    }`}
+                  >
+                    <td className="p-3 text-center">{index + 1}</td>
+                    <td className="p-3 text-center">{user.name || user.email}</td>
+
+                    {products.map((p) => {
+                      const totalForProduct = user.products
+                        .filter((prod) => prod.productId === p._id)
+                        .reduce((sum, prod) => sum + (prod.count || 0), 0);
+
+                      return (
+                        <td key={p._id} className="p-3 text-center">
+                          {totalForProduct || "-"}
+                        </td>
+                      );
+                    })}
+
+                    {/* <td className="p-3 text-center font-semibold text-orange-700">
+                      {totalForUser}
+                    </td> */}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </section>

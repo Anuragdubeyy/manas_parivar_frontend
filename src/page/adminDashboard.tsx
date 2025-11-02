@@ -79,7 +79,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <header className="text-center py-6 bg-gradient-to-r from-orange-300 to-yellow-200 shadow-md">
         <h1 className="text-3xl font-extrabold text-orange-600 drop-shadow-lg">
-           मानस परिवार 
+          मानस परिवार
         </h1>
         <p className="text-lg font-semibold text-orange-900 mt-2">
           राम नाम जपते रहो, काम करते रहो
@@ -91,27 +91,27 @@ export default function AdminDashboard() {
         <p>सीताराम चरण रति मोरे । अनुदिन बढ़ऊ अनुग्रह तोरे</p>
       </div>
 
-            <div className="p-2">
-      {/* Add Product Section */}
-      <section className="max-w-4xl mx-auto mt-6 bg-white/90 rounded-2xl shadow-md border border-orange-300 p-6">
-        <h2 className="text-2xl font-bold text-orange-700 mb-4">
-          🪔 नया संकल्प जोड़ें
-        </h2>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Input
-            placeholder="संकल्प का नाम दर्ज करें"
-            value={newProduct}
-            onChange={(e) => setNewProduct(e.target.value)}
-            className="border border-orange-400 focus:border-orange-500 rounded-lg px-3 py-2 outline-none"
-          />
-          <Button
-            onClick={addProduct}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg"
-          >
-            ➕ जोड़ें
-          </Button>
-        </div>
-      </section>
+      <div className="p-2">
+        {/* Add Product Section */}
+        <section className="max-w-4xl mx-auto mt-6 bg-white/90 rounded-2xl shadow-md border border-orange-300 p-6">
+          <h2 className="text-2xl font-bold text-orange-700 mb-4">
+            🪔 नया संकल्प जोड़ें
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Input
+              placeholder="संकल्प का नाम दर्ज करें"
+              value={newProduct}
+              onChange={(e) => setNewProduct(e.target.value)}
+              className="border border-orange-400 focus:border-orange-500 rounded-lg px-3 py-2 outline-none"
+            />
+            <Button
+              onClick={addProduct}
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg"
+            >
+              ➕ जोड़ें
+            </Button>
+          </div>
+        </section>
         {/* Product List */}
         <section className="max-w-5xl mx-auto mt-8 bg-white/90 rounded-2xl shadow-md border border-orange-300 p-6 overflow-x-auto">
           <h2 className="text-2xl font-bold text-orange-700 mb-4">
@@ -134,10 +134,12 @@ export default function AdminDashboard() {
         </section>
 
         {/* User Count Section */}
-        <section className="max-w-6xl mx-auto mt-8  bg-white/90 rounded-2xl shadow-md border border-orange-300 p-6 overflow-auto ">
-          <h2 className="text-2xl  font-bold text-orange-700 mb-4">
-          🙏 उपयोगकर्ताओं की संख्या ({users.length})
+        {/* User Count Section */}
+        <section className="max-w-6xl mx-auto mt-8 bg-white/90 rounded-2xl shadow-md border border-orange-300 p-6 overflow-auto">
+          <h2 className="text-2xl font-bold text-orange-700 mb-4">
+            🙏 उपयोगकर्ताओं की संख्या ({users.length})
           </h2>
+
           <table className="min-w-full bg-white shadow rounded-lg">
             <thead className="bg-gray-200">
               <tr>
@@ -147,21 +149,26 @@ export default function AdminDashboard() {
                     {p.name}
                   </th>
                 ))}
+                
               </tr>
             </thead>
 
             <tbody>
               {users.map((user) => (
                 <tr key={user._id} className="border-b">
-                  <td className="p-3">{user.name || user.email}</td>
+                  <td className="p-3 font-semibold">
+                    {user.name || user.email}
+                  </td>
 
                   {products.map((p) => {
-                    const productData = user.products.find(
-                      (prod) => prod.productId === p._id
-                    );
+                    // Sum counts of same productId (since some users have multiple entries of same product)
+                    const totalForProduct = user.products
+                      .filter((prod) => prod.productId === p._id)
+                      .reduce((sum, prod) => sum + (prod.count || 0), 0);
+
                     return (
                       <td key={p._id} className="p-3 text-center">
-                        {productData ? productData.count : 0}
+                        {totalForProduct}
                       </td>
                     );
                   })}
