@@ -74,7 +74,7 @@ export default function JapCounter() {
   };
 
   return (
-    <div className="w-screen flex flex-col h-screen bg-orange-50 text-center">
+    <div className="w-screen flex flex-col min-h-screen bg-orange-50 text-center">
       <div className="text-center py-6 bg-gradient-to-r from-orange-300 to-yellow-200 shadow-md">
         <div className="flex justify-center mb-4">
           <img
