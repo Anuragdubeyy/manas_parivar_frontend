@@ -77,6 +77,13 @@ export default function JapCounter() {
   return (
     <div className="w-screen flex flex-col h-screen bg-orange-50 text-center">
       <div className="text-center py-6 bg-gradient-to-r from-orange-300 to-yellow-200 shadow-md">
+        <div className="flex justify-center mb-4">
+          <img
+            src="/manas_parivar.ico"
+            alt="Manas Parivar Logo"
+            className="w-28 h-28 rounded-full shadow-md border border-orange-400"
+          />
+        </div>
         <h1 className="text-3xl font-extrabold text-orange-600 drop-shadow-lg">
           मानस परिवार
         </h1>
