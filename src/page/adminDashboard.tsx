@@ -75,9 +75,17 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-orange-100">
+    <div className="w-full min-h-screen bg-gradient-to-b from-orange-50 to-orange-100">
       {/* Header */}
       <header className="text-center py-6 bg-gradient-to-r from-orange-300 to-yellow-200 shadow-md">
+        {/* Logo */}
+          <div className="flex justify-center mb-4">
+            <img
+              src="/manas_parivar.ico"
+              alt="Manas Parivar Logo"
+              className="w-28 h-28 rounded-full shadow-md border border-orange-400"
+            />
+          </div>
         <h1 className="text-3xl font-extrabold text-orange-600 drop-shadow-lg">
           मानस परिवार
         </h1>

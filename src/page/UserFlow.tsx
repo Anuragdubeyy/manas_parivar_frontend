@@ -107,7 +107,15 @@ export default function UserPage() {
   return (
     <div className="min-h-screen w-screen  bg-gradient-to-b from-orange-50 to-orange-100">
       {/* Header */}
+
       <div className="text-center  py-6 bg-gradient-to-r from-orange-300 to-yellow-200 shadow-md">
+        <div className="flex justify-center mb-4">
+          <img
+            src="/manas_parivar.ico"
+            alt="Manas Parivar Logo"
+            className="w-28 h-28 rounded-full shadow-md border border-orange-400"
+          />
+        </div>
         <h1 className="text-3xl font-extrabold text-orange-600  drop-shadow-lg">
           मानस परिवार
         </h1>
@@ -247,87 +255,188 @@ export default function UserPage() {
       <div className="bg-white/90 rounded-2xl shadow-md border border-orange-300 p-2 h-96 overflow-auto m-4">
         <DailyProductTable />
       </div>
-      <section className="max-w-6xl m-4 bg-white/90 rounded-2xl shadow-md border border-orange-300 p-3 overflow-auto">
+      <section className="max-w-6xl m-4  bg-white/90 rounded-2xl shadow-md border border-orange-300 p-3">
         <h2 className="text-2xl font-bold text-orange-700 mb-4">
           उपयोगकर्ताओं की संख्या ({users.length})
         </h2>
 
-        <table className="min-w-full bg-white shadow rounded-lg overflow-scroll">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="p-3 text-center">#</th>
-              <th className="p-3 text-center">User</th>
-              {products.map((p) => (
-                <th key={p._id} className="p-3 text-center">
-                  {p.name}
-                </th>
-              ))}
-              {/* <th className="p-3 text-center">Total</th> */}
-            </tr>
-          </thead>
+        <div className="overflow-y-auto max-h-[500px] rounded-lg border border-gray-200">
+          <table className="min-w-full bg-white">
+            <thead className="bg-gray-200 sticky top-0 z-10">
+              <tr>
+                <th className="p-3 text-center">#</th>
+                <th className="p-3 text-center">User</th>
+                {products.map((p) => (
+                  <th key={p._id} className="p-3 text-center">
+                    {p.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
 
-          <tbody>
-            {/** 1️⃣ Sort users by total count before rendering */}
-            {[...users]
-              .sort((a, b) => {
-                const totalA = a.products.reduce(
-                  (sum, prod) => sum + (prod.count || 0),
-                  0
-                );
-                const totalB = b.products.reduce(
-                  (sum, prod) => sum + (prod.count || 0),
-                  0
-                );
-                return totalB - totalA; // highest first
-              })
-              .map((user, index) => {
-                // 2️⃣ Calculate total for each product
-                // const totalForUser = user.products.reduce(
-                //   (sum, prod) => sum + (prod.count || 0),
-                //   0
-                // );
-
-                return (
+            <tbody>
+              {[...users]
+                .sort((a, b) => {
+                  const totalA = a.products.reduce(
+                    (sum, prod) => sum + (prod.count || 0),
+                    0
+                  );
+                  const totalB = b.products.reduce(
+                    (sum, prod) => sum + (prod.count || 0),
+                    0
+                  );
+                  return totalB - totalA;
+                })
+                .map((user, index) => (
                   <tr
                     key={user._id}
                     className={`border-b ${
                       index === 0
-                        ? "bg-yellow-100 font-bold" // 🥇 highlight top user
+                        ? "bg-yellow-100 font-bold"
                         : index === 1
-                        ? "bg-gray-100" // 🥈 second
+                        ? "bg-gray-100"
                         : index === 2
-                        ? "bg-orange-50" // 🥉 third
+                        ? "bg-orange-50"
                         : ""
                     }`}
                   >
                     <td className="p-3 text-center">{index + 1}</td>
-                    <td className="p-3 text-center">{user.name || user.email}</td>
-
+                    <td className="p-3 text-center">
+                      {user.name || user.email}
+                    </td>
                     {products.map((p) => {
                       const totalForProduct = user.products
                         .filter((prod) => prod.productId === p._id)
                         .reduce((sum, prod) => sum + (prod.count || 0), 0);
-
                       return (
                         <td key={p._id} className="p-3 text-center">
                           {totalForProduct || "-"}
                         </td>
                       );
                     })}
-
-                    {/* <td className="p-3 text-center font-semibold text-orange-700">
-                      {totalForUser}
-                    </td> */}
                   </tr>
-                );
-              })}
-          </tbody>
-        </table>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-4 text-orange-800 text-sm font-bold">
-        <p>📿 जय श्री राम | मानस परिवार - सेवा में समर्पित 📿</p>
+      <footer className="bg-orange-50 border-t-4 border-orange-400 mt-10">
+        <div className="max-w-6xl mx-auto px-4 py-10 text-center text-gray-800">
+          {/* Logo */}
+          <div className="flex justify-center mb-4">
+            <img
+              src="/manas_parivar.ico"
+              alt="Manas Parivar Logo"
+              className="w-20 h-20 rounded-full shadow-md border border-orange-400"
+            />
+          </div>
+
+          {/* Main Text */}
+          <h2 className="text-2xl font-bold text-orange-700 mb-2">
+            प्रिय भक्तजनो,
+          </h2>
+          <p className="max-w-3xl mx-auto text-base leading-relaxed mb-4">
+            हम सबके आराध्य प्रभु श्रीराम के नाम का जाप ही कलियुग में सबसे सरल और
+            श्रेष्ठ साधना है। इसी दिव्य भावना के साथ मानस परिवार ने एक महान
+            संकल्प लिया है —
+          </p>
+
+          <p className="text-lg font-semibold text-orange-800 mb-2">
+            📿 “राम नाम जप संकल्प — कुल 11,25,000 बार श्रीराम नाम का उच्चारण” 📿
+          </p>
+          <p className="text-lg font-semibold text-orange-800 mb-4">
+            📿 हनुमान चालीसा संकल्प — 2,100 📿
+          </p>
+
+          <p className="text-base mb-6">
+            🙏 यह सम्पूर्ण संकल्प समर्पित किया जाएगा <br />
+            <strong>अयोध्या धाम स्थित श्री हनुमान गढ़ी मंदिर</strong> में <br />
+            हमारे पावन तीर्थ-प्रवास के अवसर पर।
+          </p>
+
+          {/* 🌺 श्री रामचरितमानस पाठ आयोजन Section */}
+          <div className="bg-gradient-to-r from-orange-100 via-white to-orange-100 border border-orange-300 rounded-xl p-5 shadow-inner mb-6 max-w-3xl mx-auto">
+            <h3 className="text-xl font-bold text-orange-700 mb-2">
+              📖 श्री रामचरितमानस पाठ आयोजन — श्री धाम अयोध्या 📖
+            </h3>
+
+            <p className="text-base leading-relaxed mb-2">
+              आप सभी मानस प्रेमियों का एक{" "}
+              <strong>संकल्पित और सामूहिक धार्मिक श्री रामचरितमानस पाठ</strong>{" "}
+              का आयोजन <strong>श्री धाम अयोध्या</strong> में <br />
+              <span className="text-orange-800 font-semibold">
+                16 दिसंबर
+              </span>{" "}
+              से शुभारंभ एवं
+              <span className="text-orange-800 font-semibold">
+                {" "}
+                17 दिसंबर
+              </span>{" "}
+              को पूर्णाहुति होगी।
+            </p>
+
+            <div className="bg-orange-100 border border-orange-300 rounded-lg p-3 my-3 text-sm sm:text-base">
+              <p className="font-semibold text-orange-800 mb-1">
+                📍 कार्यक्रम स्थल:
+              </p>
+              <p className="font-medium">
+                बड़ा भक्तमाल तपस्वी छावनी अयोध्या <br />
+                <span className="italic">(श्री अवधेश दास जी आश्रम)</span>
+              </p>
+            </div>
+
+            <p className="text-base text-orange-800 font-semibold mt-3">
+              🚆 14 दिसंबर को मुंबई से अयोध्या के लिए हम सभी मानस प्रेमी ट्रेन
+              से रवाना होंगे <br />
+              🕉 18 दिसंबर को सायंकाल को वापसी होगी।
+            </p>
+          </div>
+
+          <p className="text-base mb-6">
+            हर “राम राम” का उच्चारण न केवल हमारे अंतर्मन को शुद्ध करेगा, बल्कि
+            समाज में शांति और सकारात्मकता का भी प्रसार करेगा।
+          </p>
+
+          <h3 className="text-xl font-bold text-orange-700">
+            जय श्रीराम 🙏 जय बजरंगबली!
+          </h3>
+          <p className="mt-1 font-medium">– मानस परिवार घाटकोपर</p>
+
+          {/* Social Links */}
+          <div className="flex justify-center gap-6 mt-6">
+            <a
+              href="https://instagram.com/manas_parivaar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-600 hover:text-orange-800 transition-transform transform hover:scale-110"
+            >
+              <i className="fab fa-instagram text-3xl"></i>
+            </a>
+            <a
+              href="https://facebook.com/manas_parivaar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-600 hover:text-orange-800 transition-transform transform hover:scale-110"
+            >
+              <i className="fab fa-facebook text-3xl"></i>
+            </a>
+            <a
+              href="https://www.youtube.com/@manas_parivarr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-600 hover:text-orange-800 transition-transform transform hover:scale-110"
+            >
+              <i className="fab fa-youtube text-3xl"></i>
+            </a>
+          </div>
+
+          <div className="mt-8 text-sm text-gray-500">
+            © {new Date().getFullYear()} मानस परिवार घाटकोपर — सर्वाधिकार
+            सुरक्षित
+          </div>
+        </div>
       </footer>
     </div>
   );

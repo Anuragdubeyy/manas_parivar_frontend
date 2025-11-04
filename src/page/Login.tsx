@@ -38,7 +38,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-screen min-h-screen  flex flex-col justify-center items-center bg-gradient-to-b from-orange-50 to-yellow-100">
+    <div className="w-screen min-h-screen  flex flex-col  items-center bg-gradient-to-b from-orange-50 to-yellow-100">
+      {/* Logo */}
+          <div className="flex justify-center mb-4 mt-10">
+            <img
+              src="/manas_parivar.ico"
+              alt="Manas Parivar Logo"
+              className="w-48 h-auto rounded-full shadow-md border border-orange-400"
+            />
+          </div>
       <h1 className="text-2xl font-extrabold text-orange-600 mb-4">
         मानस परिवार
       </h1>
