@@ -2,7 +2,6 @@ import API from "@/api/axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button } from "../ui/button";
 
 export default function JapCounter() {
   const [count, setCount] = useState(0);
